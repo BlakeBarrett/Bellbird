@@ -10,6 +10,7 @@ import Foundation
 
 protocol Bellbird {
     func getAlarms(success : @escaping ([Alarm]) -> Void)
+    func createAlarm(body value: String, _ : (() -> Void)?)
     func upvote(_: inout Alarm?, _: (() -> Void)?)
     func downvote(_: inout Alarm?, _: (() -> Void)?)
 }
@@ -19,8 +20,12 @@ protocol Bellbird {
 
 extension Bellbird {
     
+    func baseUrlString() -> String {
+        return "https://bellbird.joinhandshake-internal.com/alarms.json"
+    }
+    
     func baseUrl() -> URL {
-        guard let url = URL(string: "https://bellbird.joinhandshake-internal.com/alarms.json") else {
+        guard let url = URL(string: baseUrlString()) else {
             return URL(string: "")!
         }
         return url
@@ -47,6 +52,11 @@ extension Bellbird {
         dataTask.resume()
     }
     
+    func createAlarm(body value: String, _ completion: (() -> Void)?) {
+        let alarm = BellbirdAlarm(with: value)
+        completion?()
+    }
+    
     func upvote(_ value: inout Alarm?, _ completion: (() -> Void)?) {
         value?.votes? += 1
         sendVote(value, completion: completion)
@@ -58,12 +68,15 @@ extension Bellbird {
     }
     
     private func sendVote(_ value: Alarm?, completion: (() -> Void)?) {
-        let dataTask = URLSession.shared.dataTask(with: baseUrl()) { (data, response, error) in
-            DispatchQueue.main.async(execute: { () -> Void in
-                completion?()
-            })
-        }
-        dataTask.resume()
+        guard let value = value else { return }
+        let voteUrlString = baseUrlString().replacingOccurrences(of: ".json", with: "/\(String(describing: value.id)).json")
+        
+//        let dataTask = URLSession.shared.dataTask(with: baseUrl()) { (data, response, error) in
+//            DispatchQueue.main.async(execute: { () -> Void in
+//                completion?()
+//            })
+//        }
+//        dataTask.resume()
     }
     
     /*

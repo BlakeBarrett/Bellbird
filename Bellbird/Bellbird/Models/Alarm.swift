@@ -31,8 +31,9 @@ class BellbirdAlarm: Alarm, Codable {
     var createdAt: Date?
     var updatedAt: Date?
     
-    required init() {
-        id = 0
+    required init(with body: String) {
+        id = -1
+        self.body = body
         created_at = ""
         updated_at = ""
         createdAt = Date.dateFromISOString(string: created_at)
