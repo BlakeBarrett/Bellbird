@@ -11,31 +11,59 @@ import UIKit
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
-
+    @IBOutlet weak var creationDateLabel: UILabel!
+    @IBOutlet weak var voteControl: UISegmentedControl!
+    @IBOutlet weak var voteCountLabel: UILabel!
+    
     func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = detailItem,
-           let label = detailDescriptionLabel,
-           let body = detail.body {
-                label.text = body
+        if let item = detailItem,
+           let detailLabel = detailDescriptionLabel,
+           let creationLabel = creationDateLabel {
+            // body/description
+            detailLabel.text = item.body ?? ""
+            
+            // creation date
+            if let _ = item.createdAt {
+                creationLabel.text = item.created_at
+            } else {
+                creationLabel.text = ""
+            }
+            
+            // votes
+            voteControl.selectedSegmentIndex = -1
+            voteControl.isEnabled = item.votes != nil
+            if let numVotes = item.votes {
+                voteCountLabel.text = String(describing: numVotes)
+            }
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         configureView()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     var detailItem: Alarm? {
         didSet {
             // Update the view.
             configureView()
+        }
+    }
+    
+    @IBAction func onVotesChanged(_ sender: UISegmentedControl) {
+        guard let item = detailItem else { return }
+        switch sender.selectedSegmentIndex {
+        case 0: // downvote
+            BellbirdAPI.instance.downvote(item)
+            break
+        case 1: // upvote
+            BellbirdAPI.instance.upvote(item)
+            break
+        default: break // unreachable
         }
     }
 }

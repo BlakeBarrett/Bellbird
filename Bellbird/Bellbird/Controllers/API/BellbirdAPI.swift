@@ -11,6 +11,7 @@ import Foundation
 protocol Bellbird {
     func getAlarms(success : @escaping ([Alarm]) -> Void)
     func upvote(_: Alarm)
+    func downvote(_: Alarm)
 }
 
 // TODO: Use JSON Codable to deserialize the modesl from JSON.
@@ -47,10 +48,12 @@ extension Bellbird {
     func upvote(_: Alarm) {
         
     }
-}
-
-public class API: Bellbird {
-    required public init() {
+    
+    func downvote(_: Alarm) {
         
     }
+}
+
+class BellbirdAPI: Bellbird {
+    static let instance: Bellbird = BellbirdAPI()
 }

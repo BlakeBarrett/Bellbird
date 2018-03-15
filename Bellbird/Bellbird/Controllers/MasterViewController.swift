@@ -10,16 +10,16 @@ import UIKit
 
 class MasterViewController: UITableViewController {
 
-    let api = API()
+    let api = BellbirdAPI.instance
     
     var detailViewController: DetailViewController? = nil
     var alarms = [Alarm]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = editButtonItem
-
+        navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationItem.leftBarButtonItem = nil //editButtonItem
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
@@ -42,7 +42,6 @@ class MasterViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     @objc
@@ -64,7 +63,9 @@ class MasterViewController: UITableViewController {
             }
         }
     }
+}
 
+extension MasterViewController {
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -79,7 +80,8 @@ class MasterViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let alarm = alarms[indexPath.row]
-        cell.textLabel!.text = alarm.body
+        cell.textLabel!.text = alarm.body ?? "No description available."
+        cell.detailTextLabel?.text = "\(String(describing: alarm.votes ?? 0)) votes"
         return cell
     }
 
@@ -96,7 +98,4 @@ class MasterViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
-
-
 }
-
