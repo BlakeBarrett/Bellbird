@@ -13,6 +13,9 @@
 		250133FB205AD9D800177E90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 250133F9205AD9D800177E90 /* Main.storyboard */; };
 		250133FD205AD9D800177E90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 250133FC205AD9D800177E90 /* Assets.xcassets */; };
 		25013400205AD9D800177E90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 250133FE205AD9D800177E90 /* LaunchScreen.storyboard */; };
+		2501340E205ADAA300177E90 /* BellbirdAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2501340D205ADAA300177E90 /* BellbirdAPI.swift */; };
+		25013410205ADB1F00177E90 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2501340F205ADB1F00177E90 /* Alarm.swift */; };
+		25013413205ADC7E00177E90 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25013412205ADC7E00177E90 /* DateExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		250133FC205AD9D800177E90 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		250133FF205AD9D800177E90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		25013401205AD9D800177E90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2501340D205ADAA300177E90 /* BellbirdAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellbirdAPI.swift; sourceTree = "<group>"; };
+		2501340F205ADB1F00177E90 /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		25013412205ADC7E00177E90 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +62,50 @@
 		250133F2205AD9D800177E90 /* Bellbird */ = {
 			isa = PBXGroup;
 			children = (
-				250133F3205AD9D800177E90 /* AppDelegate.swift */,
-				250133F5205AD9D800177E90 /* MasterViewController.swift */,
-				250133F7205AD9D800177E90 /* DetailViewController.swift */,
+				25013401205AD9D800177E90 /* Info.plist */,
+				25013408205ADA2C00177E90 /* Models */,
+				25013409205ADA3800177E90 /* Views */,
+				2501340A205ADA3D00177E90 /* Controllers */,
+			);
+			path = Bellbird;
+			sourceTree = "<group>";
+		};
+		25013408205ADA2C00177E90 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2501340F205ADB1F00177E90 /* Alarm.swift */,
+				25013412205ADC7E00177E90 /* DateExtensions.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		25013409205ADA3800177E90 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				250133F9205AD9D800177E90 /* Main.storyboard */,
 				250133FC205AD9D800177E90 /* Assets.xcassets */,
 				250133FE205AD9D800177E90 /* LaunchScreen.storyboard */,
-				25013401205AD9D800177E90 /* Info.plist */,
 			);
-			path = Bellbird;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2501340A205ADA3D00177E90 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				250133F3205AD9D800177E90 /* AppDelegate.swift */,
+				250133F5205AD9D800177E90 /* MasterViewController.swift */,
+				250133F7205AD9D800177E90 /* DetailViewController.swift */,
+				2501340B205ADA4700177E90 /* API */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		2501340B205ADA4700177E90 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				2501340D205ADAA300177E90 /* BellbirdAPI.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,7 +182,10 @@
 			files = (
 				250133F8205AD9D800177E90 /* DetailViewController.swift in Sources */,
 				250133F6205AD9D800177E90 /* MasterViewController.swift in Sources */,
+				25013410205ADB1F00177E90 /* Alarm.swift in Sources */,
+				2501340E205ADAA300177E90 /* BellbirdAPI.swift in Sources */,
 				250133F4205AD9D800177E90 /* AppDelegate.swift in Sources */,
+				25013413205ADC7E00177E90 /* DateExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
