@@ -20,7 +20,7 @@ class DetailViewController: UIViewController {
            let detailLabel = detailDescriptionLabel,
            let creationLabel = creationDateLabel {
             // body/description
-            detailLabel.text = item.body ?? ""
+            detailLabel.text = item.body?.uppercased() ?? ""
             
             // creation date
             if let _ = item.createdAt {

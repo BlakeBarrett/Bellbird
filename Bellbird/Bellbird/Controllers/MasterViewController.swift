@@ -30,6 +30,9 @@ class MasterViewController: UITableViewController {
         api.getAlarms(success: { alarms in
             self.alarms.removeAll(keepingCapacity: false)
             self.alarms.append(contentsOf: alarms)
+            self.alarms.sort(by: { (a, b) -> Bool in
+                a.created_at < b.created_at
+            })
             self.tableView.reloadData()
         })
         
@@ -46,7 +49,7 @@ class MasterViewController: UITableViewController {
 
     @objc
     func insertNewObject(_ sender: Any) {
-        alarms.insert(BellbirdAlarm(), at: 0)
+        alarms.insert(BellbirdAlarm(with: ""), at: 0)
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
@@ -80,7 +83,7 @@ extension MasterViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let alarm = alarms[indexPath.row]
-        cell.textLabel!.text = alarm.body ?? "No description available."
+        cell.textLabel!.text = alarm.body?.uppercased() ?? "No description available."
         cell.detailTextLabel?.text = "\(String(describing: alarm.votes ?? 0)) votes"
         return cell
     }
