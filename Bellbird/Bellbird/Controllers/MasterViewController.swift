@@ -30,9 +30,9 @@ class MasterViewController: UITableViewController {
         api.getAlarms(success: { alarms in
             self.alarms.removeAll(keepingCapacity: false)
             self.alarms.append(contentsOf: alarms)
-            self.alarms.sort(by: { (a, b) -> Bool in
-                a.created_at < b.created_at
-            })
+//            self.alarms.sort(by: { (a, b) -> Bool in
+//                a.createdAt < b.createdAt
+//            })
             self.tableView.reloadData()
         })
         
