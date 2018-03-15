@@ -55,13 +55,16 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func onVotesChanged(_ sender: UISegmentedControl) {
-        guard let item = detailItem else { return }
         switch sender.selectedSegmentIndex {
         case 0: // downvote
-            BellbirdAPI.instance.downvote(item)
+            BellbirdAPI.instance.downvote(&detailItem) { [weak self] in
+                self?.configureView()
+            }
             break
         case 1: // upvote
-            BellbirdAPI.instance.upvote(item)
+            BellbirdAPI.instance.upvote(&detailItem) { [weak self] in
+                self?.configureView()
+            }
             break
         default: break // unreachable
         }

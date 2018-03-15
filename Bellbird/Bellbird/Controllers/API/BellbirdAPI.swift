@@ -10,8 +10,8 @@ import Foundation
 
 protocol Bellbird {
     func getAlarms(success : @escaping ([Alarm]) -> Void)
-    func upvote(_: Alarm)
-    func downvote(_: Alarm)
+    func upvote(_: inout Alarm?, _: (() -> Void)?)
+    func downvote(_: inout Alarm?, _: (() -> Void)?)
 }
 
 // TODO: Use JSON Codable to deserialize the modesl from JSON.
@@ -19,8 +19,11 @@ protocol Bellbird {
 
 extension Bellbird {
     
-    func getBaseUrl() -> URL? {
-        return URL(string: "https://bellbird.joinhandshake-internal.com/alarms.json")
+    func baseUrl() -> URL {
+        guard let url = URL(string: "https://bellbird.joinhandshake-internal.com/alarms.json") else {
+            return URL(string: "")!
+        }
+        return url
     }
     
     func alarms(from value: Data) -> [Alarm] {
@@ -33,25 +36,84 @@ extension Bellbird {
     }
     
     func getAlarms(success: @escaping ([Alarm]) -> Void) {
-        guard let url = getBaseUrl() else { return }
-        let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        let dataTask = URLSession.shared.dataTask(with: baseUrl()) { (data, response, error) in
             guard let data = data else { return }
-            let allalarms = self.alarms(from: data)
+            let allAlarms = self.alarms(from: data)
             
             DispatchQueue.main.async(execute: { () -> Void in
-                success(allalarms)
+                success(allAlarms)
             })
         }
         dataTask.resume()
     }
     
-    func upvote(_: Alarm) {
-        
+    func upvote(_ value: inout Alarm?, _ completion: (() -> Void)?) {
+        value?.votes? += 1
+        sendVote(value, completion: completion)
     }
     
-    func downvote(_: Alarm) {
-        
+    func downvote(_ value: inout Alarm?, _ completion: (() -> Void)?) {
+        value?.votes? -= 1
+        sendVote(value, completion: completion)
     }
+    
+    private func sendVote(_ value: Alarm?, completion: (() -> Void)?) {
+        let dataTask = URLSession.shared.dataTask(with: baseUrl()) { (data, response, error) in
+            DispatchQueue.main.async(execute: { () -> Void in
+                completion?()
+            })
+        }
+        dataTask.resume()
+    }
+    
+    /*
+    // Thanks! https://medium.com/@sdrzn/networking-and-persistence-with-json-in-swift-4-part-2-e4f35a606141
+    func submitPost(post: Alarm, completion:((Error?) -> Void)?) {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "jsonplaceholder.typicode.com"
+        urlComponents.path = "/posts"
+        guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
+        
+        // Specify this request as being a POST method
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        // Make sure that we include headers specifying that our request's HTTP body
+        // will be JSON encoded
+        var headers = request.allHTTPHeaderFields ?? [:]
+        headers["Content-Type"] = "application/json"
+        request.allHTTPHeaderFields = headers
+        
+        // Now let's encode out Post struct into JSON data...
+        let encoder = JSONEncoder()
+        do {
+            let jsonData = try encoder.encode(post)
+            // ... and set our request's HTTP body
+            request.httpBody = jsonData
+            print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
+        } catch {
+            completion?(error)
+        }
+        
+        // Create and run a URLSession data task with our JSON encoded POST request
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                completion?(responseError!)
+                return
+            }
+            
+            // APIs usually respond with the data you just sent in your POST request
+            if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                print("response: ", utf8Representation)
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+ */
 }
 
 class BellbirdAPI: Bellbird {
